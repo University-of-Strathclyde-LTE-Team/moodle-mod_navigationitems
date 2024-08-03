@@ -12,27 +12,20 @@ class navigationitem_jumplist extends navigationitemplugin {
         $this->courseinfo = $this->cminfo->get_modinfo();
     }
     protected function get_sections() {
-
-        //var_dump($this->courseinfo->get_sections());
-        $sections = $this->cm_info->get_sections();
+        $format = course_get_format($this->courseinfo->get_course_id());
+        $sections = $this->courseinfo->get_section_info_all();
+        $context = [];
         foreach ($sections as $section) {
-            $sectioninfo = $this->cm_info->get_section_info($section);
-            var_dump($sectioninfo);
+            $context[] = (object) [
+                'name' => $format->get_section_name($section),
+                'url' => new \moodle_url('#coursecontentcollapse'.$section->section),
+                'last' => false,
+            ];
         }
-        //var_dump($sections);
-        $sections = [
-                (object)[
-                    'name' => "Section 1",
-                    'url' => "URL",
-                    'last' => false
-                ],
-                (object)[
-                        'name' => "Section 2",
-                        'url' => "URL",
-                        'last' => true
-                ]
-        ];
-        return $sections;
+        $last = array_pop($context);
+        $last->last = true;
+        $context[] = $last;
+        return $context;
     }
     public function export_for_template(renderer_base $output) {
         $context = [

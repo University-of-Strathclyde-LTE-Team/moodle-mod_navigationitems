@@ -37,7 +37,7 @@ class mod_navigationitems_mod_form extends moodleform_mod {
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
         $elements = navigationitemplugin::make_menu(navigationitemplugin::get_elements());
-        var_dump($elements);
+        //var_dump($elements);
         $mform->addElement('select', 'introeditor[text]',
             get_string('navigationelement', 'navigationitems'),
                 $elements
